@@ -152,7 +152,7 @@ val a = 0 // a は Int型
 
 ```kt
 val a: Int
-a = 0 // これはダメ
+a = null // これはダメ
 
 val b: Int?
 b = null // これはできる
