@@ -268,3 +268,75 @@ class Derived() : Base() {
 ```
 
 `override` 修飾子は `Derived.v()` のために必要である．`Base.nv()` のように `open` 修飾子が関数になければ，メソッドをサブクラス内で同じ名前で宣言することはできず，これは `override` の有無によらない．`open` 修飾子がないクラスの中では `open` メンバは禁止されている．
+
+## プロパティ
+Kotlin のクラスはプロパティを持つことができる．これらは `var`（あるいは `val`）キーワードを使用して，可変（あるいは読み取り専用）として宣言することができる:
+
+```kt
+public class Address {
+    public var name: String = ...
+    public var street: String = ...
+    public var city: String = ...
+    public var state: String? = ...
+    public var zip: String = ...
+}
+```
+
+プロパティを使うには，単に名前で参照する:
+
+```kt
+fun copyAddress(address: Address): Address {
+    val result = Address()
+    result.name = address.name
+    result.street = address.street
+    // ...
+    return result
+}
+```
+
+### ゲッターとセッター
+プロパティを宣言するための完全な構文は次のとおり:
+
+```kt
+var <propertyName>[: <PropertyType>] [= <property_initializer>]
+    [<getter>]
+    [<setter>]
+```
+
+イニシャライザ，ゲッター及びセッターは必須ではない．プロパティの型はイニシャライザから推論される場合，省略できる．
+
+例:
+
+```kt
+var allByDefault: Int? // エラー: 明示的なイニシャライザが必要，デフォルトのゲッターとセッターは暗黙
+var initialized = 1 // これはInt型を持ち，ゲッターとセッターも持つ
+```
+
+読み取り専用のプロパティ宣言の完全な構文は，可変なプロパティと比べて2点異なる．
+
+- `var` の代わりに `val` で始まる
+- セッターを認めない
+
+```kt
+val simple: Int? // Int型を持ち，デフォルトゲッターを持つ．コンストラクタで初期化される必要がある
+val inferredType = 1 // Int型を持ち，デフォルトゲッターを持つ
+```
+
+カスタムアクセサは普通の関数のように宣言できる．カスタムゲッターの例:
+
+```kt
+val isEmpty: Boolean
+    get() = this.size == 0
+```
+
+カスタムセッターは次のようになる:
+
+```kt
+var stringRepresentation: String
+    get() = this.toString()
+    set(value) {
+        setDataFromString(value)
+    }
+```
+
+慣例的にセッターの引数は `value` であるが，別の名前にすることもできる．
